@@ -1,5 +1,5 @@
-name        = Sport Aarhus Events
-description = Theme for the Sport Aarhus Events website based on the mothership theme.
+name        = AGF Basketball
+description = Theme for the AGF Basketball website based on the mothership theme.
 screenshot  = images/screenshot.png
 core        = 6.x
 engine      = phptemplate
@@ -39,5 +39,5 @@ features[] = secondary_links
 ; Information added by drupal.org packaging script on 2010-01-18
 version = "6.x-1.2"
 core = "6.x"
-project = "sportaarhusevents"
+project = "agfbasket"
 datestamp = "1263846306"

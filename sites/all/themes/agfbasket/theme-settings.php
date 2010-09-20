@@ -12,9 +12,9 @@ drupal.org/project/zen
 include_once './' . drupal_get_path('theme', 'mothership') . '/theme-settings.php';
 
 
-function sportaarhusevents_settings($saved_settings) {
+function agfbasket_settings($saved_settings) {
   // Get the default values from the .info file.
-  $defaults = mothership_theme_get_default_settings('sportaarhusevents'); //EDIT THIS!
+  $defaults = mothership_theme_get_default_settings('agfbasket'); //EDIT THIS!
 
   $settings = array_merge($defaults, $saved_settings);
   // Add the base theme's settings.

@@ -1,6 +1,6 @@
 <?php
 
-function sportaarhusevents_preprocess_page(&$vars, $hook) {
+function agfbasket_preprocess_page(&$vars, $hook) {
   // Set variables for the logo and site_name.
   if (!empty($vars['logo'])) {
     // Return the site_name even when site_name is disabled in theme settings.
@@ -12,7 +12,7 @@ function sportaarhusevents_preprocess_page(&$vars, $hook) {
 /**
  * Add current page to breadcrumb
  */
-function sportaarhusevents_breadcrumb($breadcrumb) {
+function agfbasket_breadcrumb($breadcrumb) {
   if (!empty($breadcrumb)) {
     $title = drupal_get_title();
     if (!empty($title)) {
@@ -25,7 +25,7 @@ function sportaarhusevents_breadcrumb($breadcrumb) {
 /**
  * Implements theme_menu_item_link()
  */
-function sportaarhusevents_menu_item_link($link) {
+function agfbasket_menu_item_link($link) {
   if (empty($link['localized_options'])) {
     $link['localized_options'] = array();
   }
