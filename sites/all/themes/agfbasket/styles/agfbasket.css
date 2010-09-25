@@ -1,6 +1,10 @@
 /* CSS: Brian Jensen @ www.magnify.dk */
 
+/*
+  Google fonts
+*/
 
+@import url('http://fonts.googleapis.com/css?family=PT+Sans:regular,bold&subset=cyrillic');
 
 /*
   Font, colors etc.
@@ -54,38 +58,25 @@ dl, hr, h1, h2, h3, h4, h5, h6, ol, ul, pre, table, address, fieldset {
 }
 
 /*
-  Google fonts
-*/
-
-@import url('http://fonts.googleapis.com/css?family=Nobile:regular&subset=latin');
-
-/*
   Containers
 */
 
 #wrapper {
-  background: url('../images/content-bg-bottom.png') no-repeat center bottom;
   padding: 0 0 35px;
 }
 
 #header {
-  border-bottom: 1px solid #dcdcdc;
   height: 205px;
   position: relative;
 }
 
-#header-inner {
-  height: 174px;
-}
-
 #logo {
-  left: 10px;
+  left: 30px;
   position: absolute;
-  top: 15px;
+  top: 40px;
 }
 
 #main {
-  background-color: #fff;
   padding: 15px 15px 0;
 }
 
@@ -108,6 +99,12 @@ dl, hr, h1, h2, h3, h4, h5, h6, ol, ul, pre, table, address, fieldset {
   padding: 10px;
 }
 
+/* Breadcrumb */
+
+.breadcrumb {
+    background-color: #000;
+}
+
 /*
   General menu stuff
 */
@@ -120,13 +117,12 @@ ul.menu li {
 /* Mainmenu */
 
 #main-menu {
-  background: url('../images/main-menu-bg.png') no-repeat;
+    position: absolute;
+    top: 175px;
 }
 
 #main-menu ul.menu {
   float: right;
-  height: 31px;
-  padding: 2px 0 0;
 }
 
 #main-menu ul.menu li {
@@ -136,18 +132,25 @@ ul.menu li {
   padding: 0;
 }
 
-#main-menu ul.menu li.active-trail {
+#main-menu ul.menu li.active-trail,
+#main-menu ul.menu li.hover {
   background: url('../images/main-menu-active-bg.png') repeat-x;
   border-right: 1px solid #adadad;
   border-left: 1px solid #adadad;
 }
 
+#main-menu ul.menu li.active-trail a,
+#main-menu ul.menu li.hover a {
+  padding: 3px 19px 2px;
+}
+
 #main-menu ul.menu li a {
   color: #000;
   display: block;
-  font-size: 85%;
+  font-family: 'PT Sans', Arial, sans-serif;
+  font-size: 80%;
   font-weight: bold;
-  padding: 2px 20px;
+  padding: 3px 20px 2px;
   text-decoration: none;
   text-shadow: 1px 1px 1px #fff;
   text-transform: uppercase;
@@ -159,7 +162,6 @@ ul.menu li {
 }
 
 #main-menu ul.menu li.active a,
-#main-menu ul.menu li a:hover,
 #main-menu ul.menu li a:active {
   color: #000;
 }

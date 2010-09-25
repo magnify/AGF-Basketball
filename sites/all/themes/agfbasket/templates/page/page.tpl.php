@@ -39,11 +39,11 @@
 
     </div> <!--/#header -->
 
+    <?php print $breadcrumb; ?>
+
     <div id="main" class="clear-block">
 
       <div id="main-wrapper" class="clear-block">
-
-        <?php print $breadcrumb; ?>
 
         <?php print $messages; ?>
         <?php print $help; ?>
