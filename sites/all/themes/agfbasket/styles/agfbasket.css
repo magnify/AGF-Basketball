@@ -21,7 +21,7 @@ html {
 
 body {
   background: url('../images/body-background.jpg') no-repeat top center;
-  color: #000;
+  color: #969a9b;
   font: 100%/150% Arial, Verdana, sans-serif;
   min-height: 100%;
 }
@@ -57,6 +57,49 @@ dl, hr, h1, h2, h3, h4, h5, h6, ol, ul, pre, table, address, fieldset {
   margin-bottom: 10px;
 }
 
+h1,
+h2 {
+  display: block;
+  font: bold 125%/150% Arial, Verdana, sans-serif;
+}
+
+h1 a,
+h1 a:link,
+h1 a:visited,
+h1 a:hover,
+h1 a:active,
+h2 a,
+h2 a:link,
+h2 a:visited,
+h2 a:hover,
+h2 a:active {
+  color: #fff;
+  text-decoration: none;
+}
+
+/*
+    Generel stuff
+*/
+
+.field-author,
+.field-post-date {
+  color: #585d5e;
+  display: inline-block;
+  font-size: 75%;
+}
+
+.field-body {
+  font-size: 75%;
+}
+
+/* News items on frontpage */
+
+.front #main-content .node {
+  border-bottom: 1px solid #000000;
+  border-top: 1px solid #11272a;
+}
+
+
 /*
   Containers
 */
@@ -73,7 +116,7 @@ dl, hr, h1, h2, h3, h4, h5, h6, ol, ul, pre, table, address, fieldset {
 #logo {
   left: 30px;
   position: absolute;
-  top: 40px;
+  top: 25px;
 }
 
 #main {
@@ -185,7 +228,7 @@ ul.menu li {
 }
 
 #block-menu-secondary-links ul.menu li {
-  background-color: #8b9ca3;
+  background-color: #06313f;
   border-radius: 5px;
   -moz-border-radius: 5px;
   display: inline;
@@ -200,11 +243,11 @@ ul.menu li {
 }
 
 #block-menu-secondary-links ul.menu li:hover {
-  background-color: #687b83;
+  background-color: #061618;
 }
 
 #block-menu-secondary-links ul.menu li a {
-  color: #fff;
+  color: #c5e1e3;
   display: block;
   font-size: 70%;
   line-height: 110%;
@@ -213,6 +256,10 @@ ul.menu li {
   text-decoration: none;
   text-transform: uppercase;
   text-shadow: 1px 1px 1px #646464;
+}
+
+#block-menu-secondary-links ul.menu li a:hover {
+    color: #fff;
 }
 
 /*
