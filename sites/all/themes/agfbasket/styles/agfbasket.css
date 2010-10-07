@@ -31,7 +31,7 @@ a:link,
 a:visited,
 a:hover,
 a:active {
-  color: #f45000;
+  color: #f1c600;
 }
 
 a:hover {
@@ -322,10 +322,28 @@ ul.menu li {
 }
 
 .block-nodeblock .spotbox .link a {
-  color: #f45000;
+  color: #f1c600;
   font-weight: bold;
 }
 
 .block-nodeblock .spotbox .link a:hover {
   color: #8d3205;
+}
+
+/*
+  News
+*/
+
+.view-News .title a {
+  color: #fff;
+  display: block;
+  font: bold 125%/150% Arial, Verdana, sans-serif;
+  text-decoration: none;
+}
+
+.view-News .title a:link,
+.view-News .title a:visited,
+.view-News .title a:hover,
+.view-News .title a:active {
+
 }

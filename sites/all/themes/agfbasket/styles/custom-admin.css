@@ -1,4 +1,13 @@
 /*
+  Admin links
+*/
+
+.admin-links,
+.views-admin-links {
+  display: none !important;
+}
+
+/*
   Admin toolbar
 */
 
