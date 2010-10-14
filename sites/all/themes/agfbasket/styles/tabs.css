@@ -12,6 +12,7 @@
 
 
 div.tabs {
+  display: none;
   margin: 0 0 5px 0;
 }
 
