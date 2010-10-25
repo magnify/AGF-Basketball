@@ -675,7 +675,7 @@ Submenu
   Node
 */
 
-.node {
+.node.node-news_item {
   border-bottom: 1px solid #000000;
   clear: both;
   padding: 0 0 25px;
