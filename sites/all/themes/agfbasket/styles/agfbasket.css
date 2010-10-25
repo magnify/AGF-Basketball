@@ -60,8 +60,16 @@ dl, hr, h1, h2, h3, h4, h5, h6, ol, ul, pre, table, address, fieldset {
 
 h1,
 h2 {
+  color: #fff;
   display: block;
-  font: bold 125%/150% Arial, Verdana, sans-serif;
+}
+
+h1 {
+  font: bold 175%/175% Arial, Verdana, sans-serif;
+}
+
+h2 {
+  font: bold 125%/125% Arial, Verdana, sans-serif;
 }
 
 h1 a,
@@ -99,8 +107,10 @@ h2 a:active {
 
 #main {
   background: #0e191d url('../images/content-bg.jpg') no-repeat top;
-  border-radius: 0 0 8px;
+  -webkit-border-radius: 0 0 8px 8px;
   -moz-border-radius: 0 0 8px 8px;
+  border-radius: 0 0 8px 8px;
+  font-size: 80%;
   min-height: 300px;
   padding: 25px 20px;
 }
@@ -115,7 +125,7 @@ h2 a:active {
 
 #sidebar-left,
 #sidebar-right {
-  font-size: 75%;
+  font-size: 90%;
   margin: 0;
 }
 
@@ -124,7 +134,7 @@ h2 a:active {
 .breadcrumb {
   background-color: #000;
   color: #b7b7b7;
-  font-size: 70%;
+  font-size: 75%;
   padding: 5px 0 5px 10px;
 }
 
@@ -183,7 +193,7 @@ ul.menu li {
   color: #000;
   display: block;
   font-family: 'PT Sans', Arial, sans-serif;
-  font-size: 80%;
+  font-size: 85%;
   font-weight: bold;
   padding: 3px 20px 2px;
   text-decoration: none;
@@ -254,10 +264,6 @@ ul.menu li {
 /*
 Submenu
 */
-
-#sidebar-left {
-  font-size: 75%;
-}
 
 #sidebar-left .menu {
   margin: 0;
@@ -400,7 +406,7 @@ Submenu
   border-top: 1px solid #11272a;
   clear: both;
   overflow: hidden;
-  padding: 20px 0 0;
+  padding: 30px 0 0;
 }
 
 .front .view-News .row.first {
@@ -413,18 +419,18 @@ Submenu
 }
 
 .front .view-News .body {
-  font-size: 75%;
+  font-size: 90%;
 }
 
 .front .view-News .comment,
 .front .view-News .link {
-  font-size: 75%;
+  font-size: 90%;
   float: left;
-  margin: 0 35px 0 0;
 }
 
 .front .view-News .link {
   font-weight: bold;
+  float: right;
 }
 
 .front .view-News .link a {
@@ -441,7 +447,7 @@ Submenu
 .front .view-News .posted,
 .front .view-News .user {
   color: #585d5e;
-  font-size: 70%;
+  font-size: 85%;
 }
 
 /*
@@ -451,7 +457,7 @@ Submenu
 .view-News .title a {
   color: #fff;
   display: block;
-  font: bold 125%/90% Arial, Verdana, sans-serif;
+  font: bold 150%/100% Arial, Verdana, sans-serif;
   text-decoration: none;
 }
 
@@ -484,17 +490,19 @@ Submenu
   padding: 0 0 0 15px;
 }
 
-#sidebar-right .block .content {
+#sidebar-right .block .content,
+#sidebar-right .block .view-comments-recent {
   background: url('../images/shadow-background.png') repeat-x center bottom;
   padding: 5px 0;
 }
 
-#sidebar-right .block .content a {
+#sidebar-right .block .content a,
+#sidebar-right .block .view-comments-recent a {
   padding: 3px 0 3px 25px;
 }
 
-#sidebar-right .block .content .comment a {
-  background: url('../images/sprites.png') no-repeat 15px 12px;
+#sidebar-right .block .comment a {
+  background: url('../images/sprites.png') no-repeat 15px 13px;
   display: block;
 }
 
@@ -502,38 +510,48 @@ Submenu
   Login
 */
 
-#header .block-user {
-  font-size: 85%;
+#header .block-user,
+#header .block-admin {
+  font-size: 90%;
   position: absolute;
   top: 75px;
   right: 25px;
   width: 470px;
 }
 
-#header .block-user form {
+#header .block-user form,
+#header .block-admin form {
   text-align: right;
 }
 
-#header .block-user .openid-link {
+#header .block-user .openid-link,
+#header .block-admin .openid-link {
   display: none;
 }
 
-#header .block-user label {
+#header .block-user label,
+#header .block-admin label {
   display: none;
 }
 
 #header .block-user .form-item,
-#header .block-user .form-button {
+#header .block-admin .form-item,
+#header .block-user .form-button,
+#header .block-admin .form-button {
   display: inline-block;
+  font-size: 90%;
+  float: none !important;
   margin: 0 10px 0 0;
 }
 
-#header .block-user .edit-submit {
+#header .block-user .edit-submit,
+#header .block-admin .edit-submit {
   margin: 0;
 }
 
-#header .block-user .item-list {
-  background-color: #a6a6a6;
+#header .block-user .item-list,
+#header .block-admin .item-list {
+  background-color: #909090;
   border-radius: 8px;
   -moz-border-radius: 8px;
   display: inline-block;
@@ -542,13 +560,16 @@ Submenu
   padding: 3px;
 }
 
-#header .block-user .item-list li {
+#header .block-user .item-list li,
+#header .block-admin .item-list li {
   float: left;
   font-weight: bold;
   margin: 0 0 0 10px;
+  padding: 0;
 }
 
-#header .block-user .item-list .last {
+#header .block-user .item-list .last,
+#header .block-admin .item-list .last {
   margin: 0 10px 0 10px;
 }
 
@@ -610,6 +631,11 @@ Submenu
   Form elements
 */
 
+.form-button {
+  float: left;
+  margin: 0 15px 15px 0;
+}
+
 .form-submit {
   background: #c3c3c3 url('../images/white-gradient-shadow-top.png') repeat-x 0 -15px;
   border-top: 1px solid #d3d3d3;
@@ -618,9 +644,9 @@ Submenu
   border-left: 1px solid #d3d3d3;
   color: #616161;
   cursor: pointer;
-  font-size: 90%;
+  font-size: 85%;
   font-weight: bold;
-  padding: 4px 10px 5px;
+  padding: 6px 10px 5px;
 }
 
 .form-submit:hover {
@@ -637,4 +663,96 @@ Submenu
 
 .form-text:focus {
   background: #c3c3c3 url('../images/white-gradient-shadow-top.png') repeat-x 0 -15px;
+}
+
+/*
+  Node
+*/
+
+.node {
+  border-bottom: 1px solid #000000;
+  clear: both;
+  padding: 0 0 25px;
+}
+
+/*
+  Comments
+*/
+
+#comments {
+  border-top: 1px solid #11272a;
+  padding: 15px 0 0;
+}
+
+#comments h2 {
+  padding: 15px 0 0;
+}
+
+#comments .comment {
+  background-color: #061215;
+  -webkit-border-radius: 8px;
+  -moz-border-radius: 8px;
+  border-radius: 8px;
+  margin: 0 0 15px;
+  padding: 10px 15px;
+}
+
+#comments .content {
+  border-bottom: 1px solid #000000;
+  padding: 0 0 10px;
+}
+
+#comments .submitted {
+  border-top: 1px solid #11272a;
+  color: #585d5e;
+  font-size: 85%;
+  padding: 10px 0 0;
+}
+
+#comments ul {
+  clear: both;
+  overflow: hidden;
+  margin: 10px 0;
+}
+
+#comments ul li {
+  background-color: #0b1b1f;
+  -webkit-border-radius: 5px;
+  -moz-border-radius: 5px;
+  border-radius: 5px;
+  float: left;
+  margin: 0 15px 0 0;
+}
+
+#comments ul li.comment_forbidden {
+  float: none;
+  margin: 0;
+  padding: 5px 10px;
+  width: 100%;
+}
+
+#comments ul li.comment_forbidden:hover {
+  background-color: #0b1b1f;
+}
+
+#comments ul li:hover {
+  background-color: #122a30;
+}
+
+#comments ul li a {
+  display: block;
+  padding: 0 10px 1px;
+}
+
+#comments ul li.comment_forbidden a {
+  display: inline;
+  padding: 0;
+}
+
+/*
+  CKEditor
+*/
+
+span.cke_skin_kama {
+  width: auto !important;
 }

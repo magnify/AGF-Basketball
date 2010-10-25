@@ -12,7 +12,7 @@
 
 
 div.tabs {
-  display: none;
+  font-size: 110%;
   margin: 0 0 5px 0;
 }
 
@@ -40,7 +40,7 @@ ul.primary li a {
   border-width: 0;
   font-weight: bold;
   text-decoration: none;
-  color: #777;
+  color: #d6e3e5;
   background-color: transparent;
   background: url(../images/tabs/tab-left.png) no-repeat left -38px;
 }
@@ -68,7 +68,7 @@ ul.primary li a:hover .tab {
 ul.primary li.active a,
 ul.primary li.active a:hover {
   border-width: 0;
-  color: #000;
+  color: #fff;
   background-color: transparent;
   background: url(../images/tabs/tab-left.png) no-repeat left 0;
 }
@@ -81,7 +81,7 @@ ul.primary li.active a:hover .tab {
 ul.secondary {
   margin: 0;
   padding: 0 0 0 5px; /* LTR */
-  border-bottom: 1px solid #c0c0c0;
+  border-bottom: 0;
   list-style: none;
   white-space: nowrap;
   background: url(../images/tabs/tab-secondary-bg.png) repeat-x left bottom;
@@ -101,7 +101,7 @@ ul.secondary a {
   padding: 0;
   border: 1px solid #c0c0c0;
   text-decoration: none;
-  color: #777;
+  color: #d6e3e5;
   background: url(../images/tabs/tab-secondary.png) repeat-x left -56px;
 }
 
@@ -120,6 +120,6 @@ ul.secondary a:hover {
 ul.secondary a.active,
 ul.secondary a.active:hover {
   border: 1px solid #c0c0c0;
-  color: #000;
+  color: #fff;
   background: url(../images/tabs/tab-secondary.png) repeat-x left top;
 }

@@ -55,3 +55,13 @@ div#admin-toolbar .form-button {
 .page-admin-build-block #blocks {
   clear: both;
 }
+
+/*
+  Table
+*/
+
+tr.even, tr.odd {
+  background-color: #71a2a8;
+  border-bottom: 1px solid #3c8088;
+  color: #fff;
+}
