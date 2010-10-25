@@ -119,6 +119,10 @@ h2 a:active {
   margin: 0 20px 0 0;
 }
 
+.two-sidebars #content {
+  margin: 0 20px;
+}
+
 #sidebar-left,
 #sidebar-right {
   font-size: 90%;
