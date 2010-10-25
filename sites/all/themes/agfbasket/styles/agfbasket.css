@@ -394,14 +394,14 @@ Submenu
 
 /* News items on frontpage */
 
-.front .view-News ul,
-.front .view-News li {
+.view-News ul,
+.view-News li {
   list-style: none;
   margin: 0;
   padding: 0;
 }
 
-.front .view-News .row {
+.view-News .row {
   border-bottom: 1px solid #000000;
   border-top: 1px solid #11272a;
   clear: both;
@@ -409,43 +409,43 @@ Submenu
   padding: 30px 0 0;
 }
 
-.front .view-News .row.first {
+.view-News .row.first {
   border-top: 0;
   padding: 0 0 20px;
 }
 
-.front .view-News .row.last {
+.view-News .row.last {
   border-bottom: 0;
 }
 
-.front .view-News .body {
+.view-News .body {
   font-size: 90%;
 }
 
-.front .view-News .comment,
-.front .view-News .link {
+.view-News .comment,
+.view-News .link {
   font-size: 90%;
   float: left;
 }
 
-.front .view-News .link {
+.view-News .link {
   font-weight: bold;
   float: right;
 }
 
-.front .view-News .link a {
+.view-News .link a {
   background: url('../images/sprites.png') no-repeat 0 9px;
   display: block;
   padding: 0 0 0 12px;
   text-decoration: none;
 }
 
-.front .view-News .link a:hover {
+.view-News .link a:hover {
   text-decoration: underline;
 }
 
-.front .view-News .posted,
-.front .view-News .user {
+.view-News .posted,
+.view-News .user {
   color: #585d5e;
   font-size: 85%;
 }
@@ -715,6 +715,7 @@ Submenu
   margin: 10px 0;
 }
 
+.node ul li.comment_forbidden,
 #comments ul li {
   background-color: #0b1b1f;
   -webkit-border-radius: 5px;
@@ -724,19 +725,29 @@ Submenu
   margin: 0 15px 0 0;
 }
 
+.node ul li.comment_forbidden,
 #comments ul li.comment_forbidden {
   float: none;
   margin: 0;
   padding: 5px 10px;
-  width: 100%;
 }
 
-#comments ul li.comment_forbidden:hover {
-  background-color: #0b1b1f;
+.node ul li.comment_forbidden {
+  margin: 25px 0 0;
 }
 
 #comments ul li:hover {
   background-color: #122a30;
+}
+
+.node ul li.comment_forbidden:hover,
+#comments ul li.comment_forbidden:hover {
+  background-color: #0b1b1f;
+}
+
+.node ul li.comment_forbidden,
+.node ul li.comment_forbidden:hover {
+  background-color: #061215;
 }
 
 #comments ul li a {
@@ -744,6 +755,7 @@ Submenu
   padding: 0 10px 1px;
 }
 
+.node ul li.comment_forbidden a,
 #comments ul li.comment_forbidden a {
   display: inline;
   padding: 0;
