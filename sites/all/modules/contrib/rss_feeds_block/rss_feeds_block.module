@@ -1,0 +1,566 @@
+<?php
+// $Id: rss_feeds_block.module,v 1.1.2.14 2010/03/26 00:15:48 amedjesi Exp $
+
+/**
+ * @file
+ * Module file for RSS feeds block module.
+ */
+
+ /**
+  * Defines
+  */
+// Default Defines
+define('RSS_FEEDS_BLOCK_DEFAULT_TITLE', 'RSS Feeds');
+define('RSS_FEEDS_BLOCK_DEFAULT_LIMIT', 10);
+define('RSS_FEEDS_BLOCK_DEFAULT_CONTENT_TYPE', 'rss_feed_block');
+define('RSS_FEEDS_BLOCK_DEFAULT_ITEM_CONTENT_TYPE', 'rss_feed_block_item');
+define('RSS_FEEDS_BLOCK_DEFAULT_LENGTH_FEED_TITLE', 0);
+define('RSS_FEEDS_BLOCK_DEFAULT_LENGTH_FEED_ITEM_TITLE', 0);
+define('RSS_FEEDS_BLOCK_DEFAULT_LENGTH_FEED_ITEM_DESCRIPTION', 0);
+
+// Help Defines
+define('RSS_FEEDS_BLOCK_ALL', 'all');
+define('RSS_FEEDS_BLOCK_STATUS_INFO', 'info');
+define('RSS_FEEDS_BLOCK_STATUS_ERROR', 'error');
+
+// Text Defines
+define('RSS_FEEDS_BLOCK_TEXT_TITLE', 'RSS feed block');
+define('RSS_FEEDS_BLOCK_TEXT_ALL', 'All');
+define('RSS_FEEDS_BLOCK_TEXT_MORE', 'More');
+define('RSS_FEEDS_BLOCK_TEXT_MORE_ALL_TITLE', 'Full list of all feeds');
+define('RSS_FEEDS_BLOCK_TEXT_MORE_SINGLE_TITLE', 'Full list of current selected feed');
+define('RSS_FEEDS_BLOCK_TEXT_ADD_FEED', '<add new feed>');
+
+// Status Messages Defines
+define('RSS_FEEDS_BLOCK_STATUS_SELECTED', 'Selected: ');
+define('RSS_FEEDS_BLOCK_STATUS_FEED_CREATED', 'Feed Created: ');
+define('RSS_FEEDS_BLOCK_STATUS_FEED_REMOVED', 'Removed Feed: ');
+define('RSS_FEEDS_BLOCK_STATUS_SELECTED_ALL', 'Selected: All');
+define('RSS_FEEDS_BLOCK_STATUS_NO_USER', 'No user logged in');
+define('RSS_FEEDS_BLOCK_STATUS_FAILED_CREATION', 'Failed to create feed');
+define('RSS_FEEDS_BLOCK_STATUS_FAILED_REMOVE', 'Could not remove feed');
+
+// Misc
+define('RSS_FEEDS_BLOCK_WORDSAFE', FALSE);
+define('RSS_FEEDS_BLOCK_DOTS', TRUE);
+
+// Node Grants
+define('RSS_FEEDS_BLOCK_NODE_GRANT_VIEW', TRUE);
+define('RSS_FEEDS_BLOCK_NODE_GRANT_UPDATE', TRUE);
+define('RSS_FEEDS_BLOCK_NODE_GRANT_DELETE', TRUE);
+define('RSS_FEEDS_BLOCK_NODE_GRANT_PRIORITY', 0);
+
+/**
+ * Hook Function - hook_perm().
+ */
+function rss_feeds_block_perm() {
+  return array('administer rss_feeds_block');
+}
+
+/**
+ * Hook Function - hook_init().
+ */
+function rss_feeds_block_init() {
+  drupal_add_js($data = drupal_get_path('module', 'rss_feeds_block') .'/rss_feeds_block.js', 'footer');
+  drupal_add_css($path = drupal_get_path('module', 'rss_feeds_block') .'/rss_feeds_block.css');
+}
+
+/**
+ * Hook Function - hook_node_views().
+ */
+function rss_feeds_block_views_api() {
+  return array(
+    'api' => 2,
+    'path' => drupal_get_path('module', 'rss_feeds_block') .'/views',
+  );
+}
+
+/**
+ * Hook Function - hook_menu().
+ */
+function rss_feeds_block_menu() {
+  $items = array();
+  $feed = variable_get('rss_feeds_block_content_type'
+    , RSS_FEEDS_BLOCK_DEFAULT_CONTENT_TYPE);
+  $feed_item = variable_get('rss_feeds_block_item_content_type'
+    , RSS_FEEDS_BLOCK_DEFAULT_ITEM_CONTENT_TYPE);
+
+  $items['admin/settings/rss-feeds-block'] = array(
+    'title' => 'RSS feeds block',
+    'description' => 'Configure options for RSS feeds block module.',
+    'page callback' => 'drupal_get_form',
+    'page arguments' => array('rss_feeds_block_admin_settings'),
+    'access arguments' => array('administer rss_feeds_block'),
+    'file' => 'rss_feeds_block.admin.inc',
+  );
+
+  $items['rss-feeds-block/select'] = array(
+    'page callback' => 'rss_feeds_block_select_feed',
+    'access arguments' => array('access content'),
+    'type' => MENU_CALLBACK,
+  );
+
+  $items['rss-feeds-block/add'] = array(
+    'page callback' => 'rss_feeds_block_add_feed',
+    'access callback' => 'rss_feeds_block_access',
+    'access arguments' => array(
+      array('create ' . $feed .' content', 'create ' . $feed_item .' content')),
+    'type' => MENU_CALLBACK,
+  );
+
+  $items['rss-feeds-block/remove'] = array(
+    'page callback' => 'rss_feeds_block_remove_feed',
+    'access callback' => 'rss_feeds_block_access',
+    'access arguments' => array(
+      array('delete own ' . $feed .' content', 'delete own ' . $feed_item .' content')),
+    'type' => MENU_CALLBACK,
+  );
+
+  return $items;
+}
+
+/**
+ * Hook Function - hook_block().
+ */
+function rss_feeds_block_block($op = "list", $delat = 0, $edit = array()) {
+  $block = array();
+
+  switch ($op) {
+    case "list":
+      $block[0]["info"] = t(RSS_FEEDS_BLOCK_TEXT_TITLE);
+      break;
+
+    case "view":
+      $block["subject"] = variable_get('rss_feeds_block_title', RSS_FEEDS_BLOCK_DEFAULT_TITLE);
+      $block["content"] = theme("rss_feeds_block");
+      break;
+  }
+
+  return $block;
+}
+
+/**
+ * Hook Function - hook_theme().
+ */
+function rss_feeds_block_theme($data) {
+  return array(
+    'rss_feeds_block' => array(
+      'arguments' => array(),
+    ),
+    'rss_feeds_block_select_list' => array(
+      'arguments' => array('list' => NULL),
+    ),
+    'rss_feeds_block_items' => array(
+      'arguments' => array('selected' => NULL, 'items' => NULL),
+    ),
+    'rss_feeds_block_item' => array(
+      'arguments' => array('item' => NULL),
+    ),
+    'rss_feeds_block_status' => array(
+      'arguments' => array('text' => NULL, 'type' => RSS_FEEDS_BLOCK_STATUS_INFO),
+    ),
+    'rss_feeds_block_generate_feed_title' => array(
+      'arguments' => array('node' => NULL, 'title_length' => RSS_FEEDS_BLOCK_DEFAULT_LENGTH_FEED_TITLE),
+    ),
+    'rss_feeds_block_generate_feed_item_title' => array(
+      'arguments' => array('node' => NULL, 'title_length' => RSS_FEEDS_BLOCK_DEFAULT_LENGTH_FEED_TITLE),
+    ),
+    'rss_feeds_block_generate_feed_item_description' => array(
+      'arguments' => array('node' => NULL, 'description_length' => RSS_FEEDS_BLOCK_DEFAULT_LENGTH_FEED_TITLE),
+    ),
+  );
+}
+
+/**
+ * Hook Function - node_grants().
+ */
+function rss_feeds_block_node_grants($account, $op) {
+  $grants['rss_feeds_block_author'] = array($account->uid);
+  return $grants;
+}
+
+/**
+ * Hook Function - node_access_records().
+ */
+function rss_feeds_block_node_access_records($node) {
+  $feed = variable_get('rss_feeds_block_content_type'
+    , RSS_FEEDS_BLOCK_DEFAULT_CONTENT_TYPE);
+  $feed_item = variable_get('rss_feeds_block_item_content_type'
+    , RSS_FEEDS_BLOCK_DEFAULT_ITEM_CONTENT_TYPE);
+
+  if ($node && ($node->type == $feed || $node->type == $feed_item)) {
+    $grants[] = array(
+      'realm' => 'rss_feeds_block_author',
+      'gid' => $node->uid,
+      'grant_view' => RSS_FEEDS_BLOCK_NODE_GRANT_VIEW,
+      'grant_update' => RSS_FEEDS_BLOCK_NODE_GRANT_UPDATE,
+      'grant_delete' => RSS_FEEDS_BLOCK_NODE_GRANT_DELETE,
+      'priority' => RSS_FEEDS_BLOCK_NODE_GRANT_PRIORITY,
+    );
+    return $grants;
+  }
+}
+
+/**
+ * Ajax function - Select a feed
+ */
+function rss_feeds_block_select_feed() {
+  global $user;
+
+  if ($user->uid == 0) {
+    $message->status =  theme('rss_feeds_block_status', t(RSS_FEEDS_BLOCK_STATUS_NO_USER), RSS_FEEDS_BLOCK_STATUS_ERROR);
+
+    drupal_json($message);
+    exit();
+  }
+
+  $selected = isset($_POST['selected']) ? $_POST['selected'] : NULL;
+
+  if (empty($selected)) {
+    $selected = RSS_FEEDS_BLOCK_ALL;
+  }
+
+  $message = (object) NULL;
+  if ($selected == RSS_FEEDS_BLOCK_ALL) {
+    $message->status = theme('rss_feeds_block_status', t(RSS_FEEDS_BLOCK_STATUS_SELECTED_ALL) , RSS_FEEDS_BLOCK_STATUS_INFO);
+  }
+  else {
+    $node = node_load($selected);
+    $title_length = variable_get('rss_feeds_block_length_feed_title', RSS_FEEDS_BLOCK_DEFAULT_LENGTH_SELECT_TITLE);
+    $title = theme('rss_feeds_block_generate_feed_title', $node, $title_length);
+
+    $message->status = theme('rss_feeds_block_status', t(RSS_FEEDS_BLOCK_STATUS_SELECTED) . $title, RSS_FEEDS_BLOCK_STATUS_INFO);
+  }
+  $message->feed_item_list = theme('rss_feeds_block_items', $selected, _rss_feeds_block_build_feed_item_list($selected));
+
+  drupal_json($message);
+  exit();
+}
+
+/**
+ * Ajax function  - Add a feed
+ */
+function rss_feeds_block_add_feed() {
+  global $user;
+
+  if ($user->uid == 0) {
+    $message->status =  theme('rss_feeds_block_status', t(RSS_FEEDS_BLOCK_STATUS_NO_USER), RSS_FEEDS_BLOCK_STATUS_ERROR);
+
+    drupal_json($message);
+    exit();
+  }
+
+  $feed = isset($_POST['feed']) ? $_POST['feed'] : NULL;
+
+  $node = feedapi_create_node(variable_get('rss_feeds_block_content_type', RSS_FEEDS_BLOCK_DEFAULT_CONTENT_TYPE), $feed);
+  $message = (object) NULL;
+  $message->feed_list = theme('rss_feeds_block_select_list', _rss_feeds_block_build_feed_list());
+  $message->feed_item_list = theme('rss_feeds_block_items', RSS_FEEDS_BLOCK_ALL, _rss_feeds_block_build_feed_item_list(RSS_FEEDS_BLOCK_ALL));
+
+  if (!empty($node)) {
+    $title_length = variable_get('rss_feeds_block_length_feed_title', RSS_FEEDS_BLOCK_DEFAULT_LENGTH_SELECT_TITLE);
+    $title = theme('rss_feeds_block_generate_feed_title', $node, $title_length);
+
+    $message->status = theme('rss_feeds_block_status', t(RSS_FEEDS_BLOCK_STATUS_FEED_CREATED) . $title, RSS_FEEDS_BLOCK_STATUS_INFO);
+  }
+  else {
+    $message->status = theme('rss_feeds_block_status', t(RSS_FEEDS_BLOCK_STATUS_FAILED_CREATION), RSS_FEEDS_BLOCK_STATUS_ERROR);
+  }
+
+  drupal_json($message);
+  exit();
+}
+
+/**
+ * Ajax function - Remove a feed
+ */
+function rss_feeds_block_remove_feed() {
+  global $user;
+
+  $message = (object) NULL;
+
+  if ($user->uid == 0) {
+    $message->status =  theme('rss_feeds_block_status', t(RSS_FEEDS_BLOCK_STATUS_NO_USER), RSS_FEEDS_BLOCK_STATUS_ERROR);
+
+    drupal_json($message);
+    exit();
+  }
+
+  $selected = isset($_POST['selected']) ? $_POST['selected'] : NULL;
+
+  if ($selected != RSS_FEEDS_BLOCK_ALL && _rss_feeds_block_check_user_feed($user->uid, $selected) != FALSE) {
+    $node = node_load($selected);
+    node_delete($selected);
+    $title_length = variable_get('rss_feeds_block_length_feed_title', RSS_FEEDS_BLOCK_DEFAULT_LENGTH_SELECT_TITLE);
+    $title = theme('rss_feeds_block_generate_feed_title', $node, $title_length);
+
+    $message->status =  theme('rss_feeds_block_status', t(RSS_FEEDS_BLOCK_STATUS_FEED_REMOVED) . $title, RSS_FEEDS_BLOCK_STATUS_INFO);
+    $message->feed_list = theme('rss_feeds_block_select_list', _rss_feeds_block_build_feed_list());
+    $message->feed_item_list = theme('rss_feeds_block_items', RSS_FEEDS_BLOCK_ALL, _rss_feeds_block_build_feed_item_list(RSS_FEEDS_BLOCK_ALL));
+  }
+  else {
+    $message->status = theme('rss_feeds_block_status', t(RSS_FEEDS_BLOCK_STATUS_FAILED_REMOVE), RSS_FEEDS_BLOCK_STATUS_ERROR);
+  }
+
+  drupal_json($message);
+  exit();
+}
+
+/**
+ * Theme function - Theme the block
+ */
+function theme_rss_feeds_block() {
+  global $user;
+
+  if ($user->uid != 0) {
+    $output .= "<div class='rss-feeds-block'>";
+
+    // top
+    $output .= "<div class='rss-feeds-block-top'>";
+    $output .= "<div class='rss-feeds-block-status'></div>";
+    $output .= "<span class='rss-feeds-block-button rss-feeds-block-remove-button'></span>";
+    $output .= "<select name='rss-feeds-block-feed-select'>";
+    $output .= theme('rss_feeds_block_select_list', _rss_feeds_block_build_feed_list());
+    $output .= "</select>";
+    $output .= "</div>";
+
+    // middle
+    $output .= "<div class='rss-feeds-block-middle'>";
+    $output .= theme('rss_feeds_block_items', RSS_FEEDS_BLOCK_ALL, _rss_feeds_block_build_feed_item_list(RSS_FEEDS_BLOCK_ALL));
+    $output .= "</div>";
+
+    // bottom
+    $output .= "<div class='rss-feeds-block-bottom'>";
+    $output .= "<span class='rss-feeds-block-button rss-feeds-block-add-button'></span>";
+    $output .= "<input type='text' name='rss-feeds-block-add-text' class='rss-feeds-block-add-text rss-feeds-block-default-text' title='" . t(RSS_FEEDS_BLOCK_TEXT_ADD_FEED) ."' />";
+    $output .= "</div>";
+
+    $output .= "</div>";
+  }
+  else {
+    $output .= "<div class='rss-feeds-block'>";
+    $output .= "<span class='rss-feeds-block-error'>" . t(RSS_FEEDS_BLOCK_STATUS_NO_USER) ."</span>";
+    $output .= "</div>";
+  }
+
+  return $output;
+}
+
+/**
+ * Theme function - Theme the select list
+ */
+function theme_rss_feeds_block_select_list($list) {
+  if (!empty($list)) {
+    foreach ($list as $nid => $node) {
+      $title_length = variable_get('rss_feeds_block_length_feed_title', RSS_FEEDS_BLOCK_DEFAULT_LENGTH_SELECT_TITLE);
+      $title = theme('rss_feeds_block_generate_feed_title', $node, $title_length);
+
+      $output .= "<option value='" . $nid ."'>" . $title ."</option>";
+    }
+  }
+
+  return "<option value='" . RSS_FEEDS_BLOCK_ALL ."'>". t(RSS_FEEDS_BLOCK_TEXT_ALL) ."</option>" . $output;
+}
+
+/**
+ * Theme function - Theme the items
+ */
+function theme_rss_feeds_block_items($selected, $items) {
+  if (!empty($items)) {
+    $output .= "<ul>";
+
+    foreach ($items as $item) {
+      $output .= theme('rss_feeds_block_item', $item);
+    }
+
+  $output .= "</ul>";
+    if ($selected == RSS_FEEDS_BLOCK_ALL) {
+      $output .= l(t(RSS_FEEDS_BLOCK_TEXT_MORE), 'rss-feeds-block-all', array( 'attributes' => array('class' => 'rss-feeds-block-more', 'title' => RSS_FEEDS_BLOCK_TEXT_MORE_ALL_TITLE)));
+    }
+    else {
+        $output .= l(t(RSS_FEEDS_BLOCK_TEXT_MORE), 'rss-feeds-block-single/' . $selected, array( 'attributes' => array('class' => 'rss-feeds-block-more', 'title' => RSS_FEEDS_BLOCK_TEXT_MORE_SINGLE_TITLE)));
+    }
+  }
+  else {
+    $output .= "<p>No items</p>";
+  }
+
+  return $output;
+}
+
+/**
+ * Theme function - Theme an item
+ */
+function theme_rss_feeds_block_item($item) {
+  $title_length = variable_get('rss_feeds_block_length_feed_item_title', RSS_FEEDS_BLOCK_DEFAULT_LENGTH_FEED_ITEM_TITLE);
+  $body_length = variable_get('rss_feeds_block_length_feed_item_description', RSS_FEEDS_BLOCK_DEFAULT_LENGTH_FEED_ITEM_DESCRIPTION);
+
+  $title = theme('rss_feeds_block_generate_feed_item_title', $item, $title_length);
+  $description = theme('rss_feeds_block_generate_feed_item_description', $item, $body_length);
+
+  $output .= "<li>";
+  $output .= l($title, $item->feedapi_node->url, array( 'attributes' => array('class' => 'rss-feeds-block-title', 'title' => $description)));
+  $output .= "</li>";
+
+  return $output;
+}
+
+/**
+ * Theme function - Theme an status message
+ */
+function theme_rss_feeds_block_status($text, $type = RSS_FEEDS_BLOCK_STATUS_INFO) {
+  switch ($type) {
+    case RSS_FEEDS_BLOCK_STATUS_INFO:
+      $output .= "<span class='rss-feeds-block-info'>" . $text ."</span>";
+      break;
+    case RSS_FEEDS_BLOCK_STATUS_ERROR:
+      $output .= "<span class='rss-feeds-block-error'>" . $text ."</span>";
+      break;
+  }
+
+  return $output;
+}
+
+/**
+ * Theme function - Generate feed title
+ */
+function theme_rss_feeds_block_generate_feed_title($node, $title_length = 0) {
+  $temp_title = $title_length == 0 ? $node->title : truncate_utf8($node->title, $title_length, RSS_FEEDS_BLOCK_WORDSAFE, RSS_FEEDS_BLOCK_DOTS);
+
+  return $temp_title ." (" . $node->nid .")";
+}
+
+/**
+ * Theme function - Generate item title
+ */
+function theme_rss_feeds_block_generate_feed_item_title($node, $title_length = 0) {
+  $temp_title = $title_length == 0 ? $node->title : truncate_utf8($node->title, $title_length, RSS_FEEDS_BLOCK_WORDSAFE, RSS_FEEDS_BLOCK_DOTS);
+
+  return $temp_title;
+}
+
+/**
+ * Theme function - Generate item description
+ */
+function theme_rss_feeds_block_generate_feed_item_description($node, $description_length = 0) {
+  $temp_body = $description_length == 0 ? $node->body : truncate_utf8($node->body, $description_length, RSS_FEEDS_BLOCK_WORDSAFE, RSS_FEEDS_BLOCK_DOTS);
+
+  return $temp_body;
+}
+
+/**
+ * Helper function - Build a list of feed items using feed
+ */
+function _rss_feeds_block_build_feed_item_list($selected) {
+  global $user;
+  $limit = variable_get('rss_feeds_block_limit', RSS_FEEDS_BLOCK_DEFAULT_LIMIT);
+
+  if ($selected == RSS_FEEDS_BLOCK_ALL) {
+    $items = _rss_feeds_block_get_all_feed_items($user->uid);
+}
+  else {
+    if (_rss_feeds_block_check_user_feed($user->uid, $selected) != FALSE) {
+      $items = _rss_feeds_block_get_feed_items($selected);
+    }
+  }
+
+  return $items;
+}
+
+/**
+ * Helper function - Build a list of all feed items using user
+ */
+function _rss_feeds_block_get_all_feed_items($uid) {
+  $limit = variable_get('rss_feeds_block_limit', RSS_FEEDS_BLOCK_DEFAULT_LIMIT);
+
+  $results = db_query_range("
+    SELECT ni.nid, n.type
+    FROM {feedapi_node_item} AS ni
+    INNER JOIN {feedapi_node_item_feed} AS nif
+      ON ni.nid = nif.feed_item_nid
+    INNER JOIN {node} AS n
+      ON ni.nid = n.nid
+    WHERE n.uid = %d
+    ORDER BY n.created DESC, n.title ASC"
+    , $uid, 0, $limit);
+
+  while ($result = db_fetch_object($results)) {
+    if ($result->type == variable_get('rss_feeds_block_item_content_type', RSS_FEEDS_BLOCK_DEFAULT_ITEM_CONTENT_TYPE)) {
+      $items[] = node_load($result->nid);
+    }
+  }
+
+  return $items;
+}
+
+/**
+ * Helper function - Build a list of all feed items of a feed using node id
+ */
+function _rss_feeds_block_get_feed_items($nid) {
+  $limit = variable_get('rss_feeds_block_limit', RSS_FEEDS_BLOCK_DEFAULT_LIMIT);
+
+  $results = db_query_range("
+    SELECT ni.nid
+    FROM {feedapi_node_item} AS ni
+    INNER JOIN {feedapi_node_item_feed} AS nif
+      ON ni.nid = nif.feed_item_nid
+    INNER JOIN {node} AS n
+      ON ni.nid = n.nid
+    WHERE nif.feed_nid = %d
+    ORDER BY n.created DESC, n.title ASC"
+    , $nid, 0, $limit);
+
+  while ($result = db_fetch_object($results)) {
+    $items[] = node_load($result->nid);
+  }
+
+  return $items;
+}
+
+/**
+ * Helper function - Check to see if the user has that feed
+ */
+function _rss_feeds_block_check_user_feed($uid, $nid) {
+  return db_result(db_query("
+    SELECT nid FROM {node}
+    WHERE uid = %d AND nid = %d AND type = '%s'"
+    , $uid, $nid, variable_get('rss_feeds_block_content_type', RSS_FEEDS_BLOCK_DEFAULT_CONTENT_TYPE)));
+}
+
+/**
+ * Helper function - Build a list of all the feeds
+ */
+function _rss_feeds_block_build_feed_list() {
+  global $user;
+
+  $results = db_query("
+    SELECT nid
+    FROM {node}
+    WHERE uid = %d AND type = '%s'"
+    , $user->uid, variable_get('rss_feeds_block_content_type', RSS_FEEDS_BLOCK_DEFAULT_CONTENT_TYPE));
+
+  while ($result = db_fetch_object($results)) {
+    $list[$result->nid] = node_load($result->nid);
+  }
+
+  return $list;
+}
+
+/**
+ * Helper Function - access callback.
+ */
+function rss_feeds_block_access($array_access = array()) {
+  global $user;
+
+  if (!user || $user->uid == 0) {
+    return FALSE;
+  }
+
+  foreach ($array_access as $access) {
+    if (user_access($access, $user) == FALSE) {
+      return FALSE;
+    }
+  }
+
+  return TRUE;
+}

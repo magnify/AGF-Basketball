@@ -1,0 +1,100 @@
+/* $Id: rss_feeds_block.css,v 1.1.2.4 2010/03/11 02:57:09 amedjesi Exp $ */
+
+/**
+ * General
+ */
+.rss-feeds-block {
+
+}
+
+.rss-feeds-block-top,
+.rss-feeds-block-bottom {
+  min-height: 20px;
+  height: auto !important;
+  height: 20px;
+}
+
+.rss-feeds-block-top {
+  margin: 0 0 10px 0; 
+  padding: 0 0 10px 0;
+  border-bottom: 1px solid #c0c0c0;
+}
+
+.rss-feeds-block-middle {
+}
+
+.rss-feeds-block-bottom {
+  margin: 10px 0 0 0; 
+  padding: 10px 0 0 0;
+  border-top: 1px solid #c0c0c0;
+}
+
+.rss-feeds-block ul li {
+  background: none;
+  padding: 0;
+  margin: 5px 0;
+}
+
+/**
+ * Status
+ */
+.rss-feeds-block-status {
+  margin: 0 0 10px 0;
+}
+
+.rss-feeds-block-info {
+  font-weight: bold;
+  height: 20px;
+  color: #009900;
+}
+
+.rss-feeds-block-error {
+  font-weight: bold;
+  height: 20px;
+  color: #cc0000;
+}
+
+/**
+ * Buttons
+ */
+.rss-feeds-block-button {
+  float: right;
+  height: 16px;
+  width: 16px;
+  cursor: pointer;
+}
+
+.rss-feeds-block-add-button {
+  background: url(images/add-enabled.png);
+}
+
+.rss-feeds-block-remove-button {
+  background: url(images/remove-enabled.png);
+}
+
+.rss-feeds-block-add-button.rss-feeds-block-button-disabled {
+  background: url(images/add-disabled.png);
+}
+
+.rss-feeds-block-remove-button.rss-feeds-block-button-disabled {
+  background: url(images/remove-disabled.png);
+}
+
+/**
+ * Misc
+ */
+.rss-feeds-block-more {
+  display: block;
+  font-weight: bold;
+  text-align: right;
+}
+
+.rss-feeds-block input,
+.rss-feeds-block select {
+  width: 85%;
+}
+
+.rss-feeds-block-text-label { 
+  color: #a1a1a1; 
+  font-style: italic; 
+}

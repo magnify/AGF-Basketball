@@ -134,7 +134,7 @@ h2 a:active {
 .breadcrumb {
   background-color: #000;
   color: #b7b7b7;
-  font-size: 75%;
+  font-size: 70%;
   padding: 5px 0 5px 10px;
 }
 
@@ -193,7 +193,7 @@ ul.menu li {
   color: #000;
   display: block;
   font-family: 'PT Sans', Arial, sans-serif;
-  font-size: 85%;
+  font-size: 80%;
   font-weight: bold;
   padding: 3px 20px 2px;
   text-decoration: none;
@@ -456,7 +456,6 @@ Submenu
 
 .view-News .title a {
   color: #fff;
-  display: block;
   font: bold 150%/100% Arial, Verdana, sans-serif;
   text-decoration: none;
 }
@@ -491,17 +490,20 @@ Submenu
 }
 
 #sidebar-right .block .content,
-#sidebar-right .block .view-comments-recent {
+#sidebar-right .block .view-comments-recent,
+#sidebar-right .block.block-aggregator .item-list {
   background: url('../images/shadow-background.png') repeat-x center bottom;
   padding: 5px 0;
 }
 
 #sidebar-right .block .content a,
-#sidebar-right .block .view-comments-recent a {
+#sidebar-right .block .view-comments-recent a,
+#sidebar-right .block.block-aggregator .item-list li a {
   padding: 3px 0 3px 25px;
 }
 
-#sidebar-right .block .comment a {
+#sidebar-right .block .comment a,
+#sidebar-right .block.block-aggregator .item-list li a {
   background: url('../images/sprites.png') no-repeat 15px 13px;
   display: block;
 }
@@ -532,6 +534,10 @@ Submenu
 #header .block-user label,
 #header .block-admin label {
   display: none;
+}
+
+#header .block-user .form-text {
+  padding: 5px 3px;
 }
 
 #header .block-user .form-item,
@@ -657,7 +663,7 @@ Submenu
   background: #c3c3c3 url('../images/white-gradient-shadow-bottom.png') repeat-x 0 -5px;
   border: 1px solid #a5a5a5;
   color: #726557;
-  padding: 5px 3px;
+  padding: 2px 3px;
   width: 175px;
 }
 
