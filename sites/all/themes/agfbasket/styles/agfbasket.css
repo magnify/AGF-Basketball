@@ -115,18 +115,19 @@ h2 a:active {
   padding: 25px 20px;
 }
 
+.front #content,
 #content {
   margin: 0 20px 0 0;
-}
-
-.two-sidebars #content {
-  margin: 0 20px;
 }
 
 #sidebar-left,
 #sidebar-right {
   font-size: 90%;
   margin: 0;
+}
+
+#sidebar-left {
+  margin: 0 20px 0 0;
 }
 
 /* Breadcrumb */
