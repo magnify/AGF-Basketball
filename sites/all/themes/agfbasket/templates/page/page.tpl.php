@@ -49,7 +49,7 @@
         <?php print $help; ?>
 
         <?php if ($left && !$is_front): ?>
-          <div id="sidebar-left" class="column sidebar region grid-5">
+          <div id="sidebar-left" class="column sidebar region">
                   <div id="sidebar-left-inner">
               <?php print $left; ?>
             </div>
