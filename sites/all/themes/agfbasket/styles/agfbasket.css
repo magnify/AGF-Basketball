@@ -775,3 +775,27 @@ Submenu
 span.cke_skin_kama {
   width: auto !important;
 }
+
+/*
+Messages
+*/
+
+.messages.status ul {
+  list-style: none;
+}
+
+div.messages, /* Important messages (status, warning, and error) for the user */
+div.status,
+div.warning,
+div.error {
+  clear: both;
+  min-height: 21px;
+  margin: 0 1em 5px 1em;
+  border: 2px solid #3f7987;
+  padding: 5px 5px 5px 10px;
+  color: #092931;
+  background-color: #d7f8f8;
+  /* background-image: url(../images/messages/messages-status.png); */
+  background-repeat: no-repeat;
+  background-position: 5px 5px;
+}
