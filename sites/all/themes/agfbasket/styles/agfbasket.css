@@ -295,7 +295,7 @@ Submenu
 }
 
 #sidebar-left .menu li a:hover {
-  background-color: #061519;
+  background-color: #000608;
   -moz-border-radius: 0;
   -webkit-border-radius: 0;
   border-radius: 0;
@@ -348,10 +348,15 @@ Submenu
   text-decoration: none;
 }
 
+#sidebar-left .menu li.active {
+  border-top: 1px solid #000;
+}
+
 #sidebar-left .menu a.active {
-  background-color: #061519;
+  background-color: #000608;
   background-position: 17px 14px;
-  color: #768718;
+  border-top: 1px solid #061215;
+  color: #f1c600;
 }
 
 #sidebar-left .menu .menu li a {
