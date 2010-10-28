@@ -884,7 +884,7 @@ div.error {
 .pager .pager-previous a:hover,
 .pager .pager-next a:hover,
 .pager .pager-last a:hover {
-  background-color: #0d191c;
+  background-color: #000a0c;
   color: #fff !important;
 }
 
