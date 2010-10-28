@@ -870,12 +870,11 @@ div.error {
 .pager .pager-last a:link,
 .pager .pager-last a:visited,
 .pager.item-list .pager-current {
-  background-color: #132125;
-  border: 1px solid #000;
+  background-color: #011014;
   -moz-border-radius: 5px;
   -webkit-border-radius: 5px;
   border-radius: 5px;
-  color: #4d4d4d !important;
+  color: #2c525d  !important;
   padding: 4px 10px;
   text-decoration: none !important;
 }
