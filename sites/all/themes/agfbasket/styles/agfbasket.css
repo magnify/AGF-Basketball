@@ -68,6 +68,10 @@ h1 {
   font: bold 175%/175% Arial, Verdana, sans-serif;
 }
 
+.node h1 {
+  margin: 0;
+}
+
 h2 {
   font: bold 125%/125% Arial, Verdana, sans-serif;
 }
@@ -471,6 +475,7 @@ Submenu
   text-decoration: underline;
 }
 
+.node .submitted,
 .view-News .posted,
 .view-News .user {
   color: #585d5e;
