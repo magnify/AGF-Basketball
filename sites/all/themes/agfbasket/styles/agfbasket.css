@@ -270,21 +270,23 @@ Submenu
 #sidebar-left .menu {
   margin: 0;
   padding: 0;
-  width: 240px;
+  width: 220px;
 }
 
 #sidebar-left .menu li {
   background-color: #000;
-  border-radius: 5px 5px 0 0;
   -moz-border-radius: 5px 5px 0 0;
+  -webkit-border-radius: 5px 5px 0 0;
+  border-radius: 5px 5px 0 0;
   line-height: 175%;
   margin: 0;
   padding: 0;
 }
 
 #sidebar-left .menu li.last {
-  border-radius: 0 0 5px 5px;
   -moz-border-radius: 0 0 5px 5px;
+  -webkit-border-radius: 0 0 5px 5px;
+  border-radius: 0 0 5px 5px;
   border-top: 1px solid #000;
 }
 
@@ -292,31 +294,26 @@ Submenu
   border-top: 1px solid #061215;
 }
 
-#sidebar-left .menu li li {
-  border-radius: 0;
-  -moz-border-radius: 0;
-  border-top: 1px solid #000;
-}
-
-#sidebar-left .menu li li a {
-  border-top: 1px solid #061215;
-}
-
 #sidebar-left .menu li a:hover {
-  background-color: #000303;
-  background-position: 18px 14px;
-  border-radius: 0;
+  background-color: #061519;
   -moz-border-radius: 0;
+  -webkit-border-radius: 0;
+  border-radius: 0;
 }
 
+#sidebar-left .menu li.first a.active,
 #sidebar-left .menu li.first a:hover {
-  border-radius: 5px 5px 0 0;
   -moz-border-radius: 5px 5px 0 0;
+  -webkit-border-radius: 5px 5px 0 0;
+  border-radius: 5px 5px 0 0;
 }
 
+#sidebar-left .menu li.last a:active,
+#sidebar-left .menu li.last a.active,
 #sidebar-left .menu li.last a:hover {
-  border-radius: 0 0 5px 5px;
   -moz-border-radius: 0 0 5px 5px;
+  -webkit-border-radius: 0 0 5px 5px;
+  border-radius: 0 0 5px 5px;
 }
 
 #sidebar-left .menu li.first li a:hover,
@@ -324,8 +321,15 @@ Submenu
 #sidebar-left .menu li.last li a:hover,
 #sidebar-left .menu li li.last a:hover,
 #sidebar-left .menu li li a:hover {
-  border-radius: 0;
   -moz-border-radius: 0;
+  -webkit-border-radius: 0;
+  border-radius: 0;
+}
+
+#sidebar-left .menu li.first.last a:hover {
+  -moz-border-radius: 0 0 8px 8px;
+  -webkit-border-radius: 0 0 8px 8px;
+  border-radius: 0 0 8px 8px;
 }
 
 #sidebar-left .menu li:first {
@@ -345,8 +349,9 @@ Submenu
 }
 
 #sidebar-left .menu a.active {
-  background-position: 18px 14px;
-  color: #f1c600;
+  background-color: #f0f0f0;
+  background-position: 17px 14px;
+  color: #768718;
 }
 
 #sidebar-left .menu .menu li a {
