@@ -870,8 +870,8 @@ div.error {
 .pager .pager-last a:link,
 .pager .pager-last a:visited,
 .pager.item-list .pager-current {
-  background-color: #dedede;
-  border: 1px solid #797979;
+  background-color: #132125;
+  border: 1px solid #000;
   -moz-border-radius: 5px;
   -webkit-border-radius: 5px;
   border-radius: 5px;
@@ -885,12 +885,12 @@ div.error {
 .pager .pager-previous a:hover,
 .pager .pager-next a:hover,
 .pager .pager-last a:hover {
-  background-color: #4d4d4d;
+  background-color: #0d191c;
   color: #fff !important;
 }
 
 .pager.item-list .pager-current {
-  background-color: #4d4d4d;
+  background-color: #0d191c;
   color: #fff !important;
   *margin: 0 4px 0 0;
   padding: 4px 10px;
