@@ -802,7 +802,7 @@ div.warning,
 div.error {
   clear: both;
   min-height: 21px;
-  margin: 0 1em 5px 1em;
+  margin: 0 0 25px;
   border: 2px solid #3f7987;
   padding: 5px 5px 5px 10px;
   color: #092931;
