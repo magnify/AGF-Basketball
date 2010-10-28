@@ -889,7 +889,7 @@ div.error {
 }
 
 .pager.item-list .pager-current {
-  background-color: #0d191c;
+  background-color: #000a0c;
   color: #fff !important;
   *margin: 0 4px 0 0;
   padding: 4px 10px;
