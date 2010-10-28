@@ -50,13 +50,13 @@
 
         <?php if ($left && !$is_front): ?>
           <div id="sidebar-left" class="column sidebar region">
-                  <div id="sidebar-left-inner">
+            <div id="sidebar-left-inner">
               <?php print $left; ?>
             </div>
           </div> <!-- //end #sidebar-left-inner -->
         <?php endif; ?>
 
-        <div id="content" class="column <?php $is_front ? print ns('grid-16', $right, 6) : print ns('grid-20', $left, 6, $right, 6) ; ?> clear-block">
+        <div id="content" class="column <?php print ns('grid-16', $left, 2, $right, 6); ?>">
           <div id="content-inner">
             <div id="main-content" class="region">
               <?php if ($tabs): ?>
