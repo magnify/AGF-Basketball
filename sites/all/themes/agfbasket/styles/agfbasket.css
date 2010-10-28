@@ -708,6 +708,10 @@ Submenu
   padding: 0 0 25px;
 }
 
+.node p {
+  margin: 15px 0;
+}
+
 /*
   Comments
 */
