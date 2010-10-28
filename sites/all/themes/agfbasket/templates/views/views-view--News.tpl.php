@@ -59,7 +59,7 @@
   <?php endif; ?>
 
   <?php if ($pager): ?>
-    <?php print $pager; ?>
+    <div class="pager-wrapper"><?php print $pager; ?></div>
   <?php endif; ?>
 
   <?php if ($attachment_after): ?>
