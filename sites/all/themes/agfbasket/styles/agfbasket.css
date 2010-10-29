@@ -550,7 +550,7 @@ Submenu
   position: absolute;
   top: 75px;
   right: 25px;
-  width: 475px;
+  width: 550px;
 }
 
 #header .block-user form,
@@ -576,7 +576,7 @@ Submenu
 #header .block-admin .form-item,
 #header .block-user .form-button,
 #header .block-admin .form-button {
-  display: inline-block;
+  display: inline;
   font-size: 90%;
   float: none !important;
   margin: 0 10px 0 0;
