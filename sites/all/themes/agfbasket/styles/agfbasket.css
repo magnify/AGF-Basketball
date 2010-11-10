@@ -26,6 +26,10 @@ body {
   min-height: 100%;
 }
 
+textarea {
+  font: 100%/150% Arial, Verdana, sans-serif;
+}
+
 a,
 a:link,
 a:visited,
