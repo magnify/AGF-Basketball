@@ -699,6 +699,10 @@ Submenu
   width: 175px;
 }
 
+.node .form-text {
+  width: auto;
+}
+
 .form-text:focus {
   background: #c3c3c3 url('../images/white-gradient-shadow-top.png') repeat-x 0 -15px;
 }
