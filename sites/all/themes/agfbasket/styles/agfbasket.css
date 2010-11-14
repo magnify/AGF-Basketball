@@ -453,6 +453,11 @@ Submenu
   border-bottom: 0;
 }
 
+.view-News .image {
+  float: left;
+  margin: 0 15px 15px 0;
+}
+
 .view-News .body {
   font-size: 90%;
 }
