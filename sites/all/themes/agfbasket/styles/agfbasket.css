@@ -673,8 +673,9 @@ Submenu
 }
 
 .block-nodeblock .spotbox .link a {
-  background: url('../images/sprites.png') no-repeat 15px 8px;
+  background: url('../images/sprites.png') no-repeat 15px 4px;
   font-weight: bold;
+  padding: 0 0 0 28px;
 }
 
 .block-nodeblock .spotbox .link a:hover {
