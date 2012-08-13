@@ -1,5 +1,4 @@
 <?php
-// $Id: term_parent.inc,v 1.1.2.2 2010/07/15 19:13:16 merlinofchaos Exp $
 
 /**
  * @file
@@ -71,7 +70,7 @@ function ctools_term_parent_ctools_access_check($conf, $context) {
   }
   $vid = $conf['vid'];
 
-  $count = db_result(db_query('SELECT COUNT(*) FROM {term_hierarchy} th INNER JOIN {term_data} td ON th.parent = td.tid WHERE th.td = %d AND td.vid = %d',  $context->data->tid, $vid));
+  $count = db_result(db_query('SELECT COUNT(*) FROM {term_hierarchy} th INNER JOIN {term_data} td ON th.parent = td.tid WHERE th.tid = %d AND td.vid = %d',  $context->data->tid, $vid));
 
   return $count ? TRUE : FALSE;
 }

@@ -1,5 +1,4 @@
 <?php
-// $Id: modal.inc,v 1.7.2.3 2010/06/16 17:32:30 merlinofchaos Exp $
 
 /**
  * @file
@@ -48,18 +47,17 @@ function ctools_modal_add_js() {
     return;
   }
 
-  $settings = array('CToolsModal' => array(
-    'closeText' => t('Close Window'),
-    'closeImage' => theme('image', ctools_image_path('icon-close-window.png'), t('Close window'), t('Close window')),
-    'throbber' => theme('image', ctools_image_path('throbber.gif'), t('Loading...'), t('Loading')),
-    'backDropOpacity' => '.55',
-    'backDropColor' => '#fff'
-  ));
+  $settings = array(
+    'CToolsModal' => array(
+      'loadingText' => t('Loading...'),
+      'closeText' => t('Close Window'),
+      'closeImage' => theme('image', ctools_image_path('icon-close-window.png'), t('Close window'), t('Close window')),
+      'throbber' => theme('image', ctools_image_path('throbber.gif'), t('Loading...'), t('Loading')),
+    ),
+  );
 
   drupal_add_js($settings, 'setting');
   drupal_add_js('misc/jquery.form.js');
-  ctools_add_js('dimensions');
-  ctools_add_js('mc');
   ctools_add_js('ajax-responder');
   ctools_add_js('modal');
 
@@ -67,6 +65,9 @@ function ctools_modal_add_js() {
   $done = TRUE;
 }
 
+/**
+ * @todo this is deprecated
+ */
 function ctools_modal_add_plugin_js($plugins) {
   $css = array();
   $js = array(drupal_get_path('module', 'ctools') . '/js/dependent.js' => TRUE);
@@ -206,11 +207,11 @@ function ctools_modal_form_wrapper($form_id, &$form_state) {
  * Render a form into an AJAX display.
  */
 function ctools_modal_form_render($form_state, $output) {
-  $title = empty($form_state['title']) ? '' : $form_state['title'];
+  $title = empty($form_state['title']) ? drupal_get_title() : $form_state['title'];
 
   // If there are messages for the form, render them.
   if ($messages = theme('status_messages')) {
-    $output = '<div class="messages">' . $messages . '</div>' . $output;
+    $output = $messages . $output;
   }
 
   $commands = array();
@@ -234,4 +235,3 @@ function ctools_modal_render($title, $output) {
   ctools_include('ajax');
   ctools_ajax_render($commands);
 }
-

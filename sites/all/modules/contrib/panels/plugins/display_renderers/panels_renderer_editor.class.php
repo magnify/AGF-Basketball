@@ -1,5 +1,4 @@
 <?php
-// $Id: panels_renderer_editor.class.php,v 1.1.2.9 2010/07/26 23:08:21 merlinofchaos Exp $
 
 /**
  * @file
@@ -91,14 +90,14 @@ class panels_renderer_editor extends panels_renderer_standard {
     // @todo this should be panel-region not panels-display -- but CSS and .js has to be updated.
     $output = "<div class='panels-display' id='panel-pane-$region_id'>";
     $output .= $panel_buttons;
-    $output .= "<h2 class='label'>" . $this->plugins['layout']['panels'][$region_id] . "</h2>";
+    $output .= "<h2 class='label'>" . check_plain($this->plugins['layout']['panels'][$region_id]) . "</h2>";
     $output .= $content;
     $output .= "</div>";
 
     return $output;
   }
 
-  function render_pane($pane) {
+  function render_pane(&$pane) {
     // Pass through to normal rendering if not in admin mode.
     if (!$this->admin) {
       return parent::render_pane($pane);
@@ -204,13 +203,16 @@ class panels_renderer_editor extends panels_renderer_standard {
    */
   function get_display_links() {
     $links = array();
-    $style_links = $this->get_style_links('display');
 
-    $links[] = array(
-      'title' => '<span class="dropdown-header">' . t('Style') . '</span>' . theme_links($style_links),
-      'html' => TRUE,
-      'attributes' => array('class' => 'panels-sub-menu'),
-    );
+    if (user_access('administer panels styles')) {
+      $style_links = $this->get_style_links('display');
+
+      $links[] = array(
+        'title' => '<span class="dropdown-header">' . t('Style') . '</span>' . theme_links($style_links),
+        'html' => TRUE,
+        'attributes' => array('class' => 'panels-sub-menu'),
+      );
+    }
 
     if (user_access('use panels caching features')) {
       $links[] = array(
@@ -262,18 +264,20 @@ class panels_renderer_editor extends panels_renderer_standard {
       ),
     );
 
-    $links[] = array(
-      'title' => '<hr />',
-      'html' => TRUE,
-    );
+    if (user_access('administer panels styles')) {
+      $links[] = array(
+        'title' => '<hr />',
+        'html' => TRUE,
+      );
 
-    $style_links = $this->get_style_links('region', $region_id);
+      $style_links = $this->get_style_links('region', $region_id);
 
-    $links[] = array(
-      'title' => '<span class="dropdown-header">' . t('Style') . '</span>' . theme_links($style_links),
-      'html' => TRUE,
-      'attributes' => array('class' => 'panels-sub-menu'),
-    );
+      $links[] = array(
+        'title' => '<span class="dropdown-header">' . t('Style') . '</span>' . theme_links($style_links),
+        'html' => TRUE,
+        'attributes' => array('class' => 'panels-sub-menu'),
+      );
+    }
 
     return theme('ctools_dropdown', theme('image', ctools_image_path('icon-addcontent.png', 'panels')), $links, TRUE, 'pane-add-link panels-region-links-' . $region_id);
   }
@@ -314,7 +318,8 @@ class panels_renderer_editor extends panels_renderer_standard {
     }
 
     $subtype = ctools_content_get_subtype($content_type, $pane->subtype);
-    if (!empty($content_type['edit form']) || !empty($subtype['edit form'])) {
+
+    if (ctools_content_editable($content_type, $subtype, $pane->configuration)) {
       $links[] = array(
         'title' => isset($content_type['edit text']) ? $content_type['edit text'] : t('Settings'),
         'href' => $this->get_url('edit-pane', $pane->pid),
@@ -330,18 +335,20 @@ class panels_renderer_editor extends panels_renderer_standard {
       );
     }
 
-    $links[] = array(
-      'title' => '<hr />',
-      'html' => TRUE,
-    );
+    if (user_access('administer panels styles')) {
+      $links[] = array(
+        'title' => '<hr />',
+        'html' => TRUE,
+      );
 
-    $style_links = $this->get_style_links('pane', $pane->pid);
+      $style_links = $this->get_style_links('pane', $pane->pid);
 
-    $links[] = array(
-      'title' => '<span class="dropdown-header">' . t('Style') . '</span>' . theme_links($style_links),
-      'html' => TRUE,
-      'attributes' => array('class' => 'panels-sub-menu'),
-    );
+      $links[] = array(
+        'title' => '<span class="dropdown-header">' . t('Style') . '</span>' . theme_links($style_links),
+        'html' => TRUE,
+        'attributes' => array('class' => 'panels-sub-menu'),
+      );
+    }
 
     if (user_access('administer pane access')) {
       $links[] = array(
@@ -578,7 +585,7 @@ class panels_renderer_editor extends panels_renderer_standard {
         $content_title = filter_xss_admin($content_type['title']);
 
         // Ensure content with the same title doesn't overwrite each other.
-        while (isset($categories['content'][$content_title])) {
+        while (isset($categories[$category_key]['content'][$content_title])) {
           $content_title .= '-';
         }
 
@@ -654,31 +661,34 @@ class panels_renderer_editor extends panels_renderer_standard {
       $output = '<div class="panels-categories-description">';
       $output .= t('Content options are divided by category. Please select a category from the left to proceed.');
       $output .= '</div>';
-      return $output;
+    }
+    else {
+      $titles = array_keys($content);
+      natcasesort($titles);
+
+      // Fill out the info for our current category.
+      $columns = 2;
+      $col[1] = '';
+      $col[2] = '';
+
+      $col_size = count($titles) / $columns;
+      $count = 0;
+      foreach ($titles as $title) {
+        $which = floor($count++ / $col_size) + 1; // we leave 0 for the categories.
+        $col[$which] .= $this->render_add_content_link($region, $content[$title]);
+      }
+
+      $output = '<div class="panels-section-columns">';
+      foreach ($col as $id => $column) {
+        $output .= '<div class="panels-section-column panels-section-column-' . $id . '">'
+        . '<div class="inside">' . $column . '</div></div>';
+      }
+      $output .= '</div>'; // columns
     }
 
-    $titles = array_keys($content);
-    natcasesort($titles);
-
-    // Fill out the info for our current category.
-    $columns = 2;
-    $col[1] = '';
-    $col[2] = '';
-
-    $col_size = count($titles) / $columns;
-    $count = 0;
-    foreach ($titles as $title) {
-      $which = floor($count++ / $col_size) + 1; // we leave 0 for the categories.
-      $col[$which] .= $this->render_add_content_link($region, $content[$title]);
+    if ($messages = theme('status_messages')) {
+      $output = '<div class="messages">' . $messages . '</div>' . $output;
     }
-
-    $output = '<div class="panels-section-columns">';
-    foreach ($col as $id => $column) {
-      $output .= '<div class="panels-section-column panels-section-column-' . $id . '">'
-      . '<div class="inside">' . $column . '</div></div>';
-    }
-    $output .= '</div>'; // columns
-
     return $output;
   }
 

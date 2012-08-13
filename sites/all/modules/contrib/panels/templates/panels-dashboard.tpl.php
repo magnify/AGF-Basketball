@@ -1,12 +1,11 @@
 <?php
-// $Id: panels-dashboard.tpl.php,v 1.1.2.4 2010/07/23 21:49:03 merlinofchaos Exp $
 ?>
 <div class="panels-dashboard">
-  <div class="dashboard-left">
+  <div class="dashboard-left clear-block">
     <?php print $left; ?>
   </div>
 
-  <div class="dashboard-right">
+  <div class="dashboard-right clear-block">
     <?php print $right; ?>
   </div>
 </div>

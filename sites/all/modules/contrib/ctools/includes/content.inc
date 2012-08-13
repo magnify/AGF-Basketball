@@ -1,5 +1,4 @@
 <?php
-// $Id: content.inc,v 1.12.2.9 2010/07/26 18:37:03 merlinofchaos Exp $
 
 /**
  * @file
@@ -60,6 +59,14 @@ function ctools_content_process(&$plugin, $info) {
     $plugin['add form'] = $function_base . 'edit_form';
   }
 
+  if (!isset($plugin['description'])) {
+    $plugin['description'] = '';
+  }
+
+  if (!isset($plugin['icon'])) {
+    $plugin['icon'] = ctools_content_admin_icon($plugin);
+  }
+
   // Another ease of use check:
   if (!isset($plugin['content types'])) {
     // If a subtype plugin exists, try to use it. Otherwise assume single.
@@ -70,7 +77,7 @@ function ctools_content_process(&$plugin, $info) {
       $type = array(
         'title' => $plugin['title'],
         'description' => $plugin['description'],
-        'icon' => $plugin['icon'],
+        'icon' => ctools_content_admin_icon($plugin),
         'category' => $plugin['category'],
       );
 
@@ -81,6 +88,9 @@ function ctools_content_process(&$plugin, $info) {
         $type['top level'] = $plugin['top level'];
       }
       $plugin['content types'] = array($plugin['name'] => $type);
+      if (!isset($plugin['single'])) {
+        $plugin['single'] = TRUE;
+      }
     }
   }
 }
@@ -133,6 +143,10 @@ function ctools_content_get_subtypes($type) {
   }
   else {
     $plugin = ctools_get_content_type($type);
+  }
+
+  if (empty($plugin) || empty($plugin['name'])) {
+    return;
   }
 
   if (isset($cache[$plugin['name']])) {
@@ -260,13 +274,23 @@ function ctools_content_render($type, $subtype, $conf, $keywords = array(), $arg
     $plugin = ctools_get_content_type($type);
   }
 
-  if ($function = ctools_plugin_get_function($plugin, 'render callback')) {
+  $subtype_info = ctools_content_get_subtype($plugin, $subtype);
+
+  $function = ctools_plugin_get_function($subtype_info, 'render callback');
+  if (!$function) {
+    $function = ctools_plugin_get_function($plugin, 'render callback');
+  }
+
+  if ($function) {
     $pane_context = ctools_content_select_context($plugin, $subtype, $conf, $context);
     if ($pane_context === FALSE) {
       return;
     }
 
     $content = $function($subtype, $conf, $args, $pane_context, $incoming_content);
+    if (empty($content)) {
+      return;
+    }
 
     // Set up some defaults and other massaging on the content before we hand
     // it back to the caller.
@@ -311,6 +335,24 @@ function ctools_content_render($type, $subtype, $conf, $keywords = array(), $arg
 
     return $content;
   }
+}
+
+/**
+ * Determine if a content type can be edited or not.
+ *
+ * Some content types simply have their content and no options. This function
+ * lets a UI determine if it should display an edit link or not.
+ */
+function ctools_content_editable($type, $subtype, $conf) {
+  if (empty($type['edit form']) && empty($subtype['edit form'])) {
+    return FALSE;
+  }
+
+  if ($function = ctools_plugin_get_function($subtype, 'check editable')) {
+    return $function($type, $subtype, $conf);
+  }
+
+  return TRUE;
 }
 
 /**
@@ -543,7 +585,7 @@ function ctools_content_form($op, $form_info, &$form_state, $plugin, $subtype_na
     if (!empty($subtype['edit form'])) {
       _ctools_content_create_form_info($form_info, $subtype['edit form'], $subtype, $subtype, $op);
     }
-    if (!empty($plugin['edit form'])) {
+    else if (!empty($plugin['edit form'])) {
       _ctools_content_create_form_info($form_info, $plugin['edit form'], $plugin, $subtype, $op);
     }
   }
@@ -713,6 +755,35 @@ function ctools_content_select_context($plugin, $subtype, $conf, $contexts) {
   // do not display the pane.
   if (empty($subtype_info['required context'])) {
     return;
+  }
+
+  // Deal with dynamic required contexts not getting updated in the panes.
+  // For example, Views let you dynamically change context info. While
+  // we cannot be perfect, one thing we can do is if no context at all
+  // was asked for, and then was later added but none is selected, make
+  // a best guess as to what context should be used. THis is right more
+  // than it's wrong.
+  if (is_array($subtype_info['required context'])) {
+    if (empty($conf['context']) || count($subtype_info['required context']) != count($conf['context'])) {
+      foreach($subtype_info['required context'] as $index => $required) {
+        if (!isset($conf['context'][$index])) {
+          $filtered = ctools_context_filter($contexts, $required);
+          if ($filtered) {
+            $keys = array_keys($filtered);
+            $conf['context'][$index] = array_shift($keys);
+          }
+        }
+      }
+    }
+  }
+  else {
+    if (empty($conf['context'])) {
+      $filtered = ctools_context_filter($contexts, $subtype_info['required context']);
+      if ($filtered) {
+        $keys = array_keys($filtered);
+        $conf['context'] = array_shift($keys);
+      }
+    }
   }
 
   if (empty($conf['context'])) {

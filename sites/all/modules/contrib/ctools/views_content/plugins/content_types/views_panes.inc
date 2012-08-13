@@ -1,5 +1,4 @@
 <?php
-// $Id: views_panes.inc,v 1.14.2.14 2010/07/23 21:47:21 merlinofchaos Exp $
 
 /**
  * @file
@@ -50,7 +49,10 @@ function views_content_views_panes_content_type_content_types($plugin) {
         if (empty($display->handler->panel_pane_display)) {
           continue;
         }
-        $types[$view->name . '-' . $id] = _views_content_panes_content_type($view, $display);
+        $info = _views_content_panes_content_type($view, $display);
+        if ($info) {
+          $types[$view->name . '-' . $id] = $info;
+        }
       }
 
       $view->destroy();
@@ -79,6 +81,12 @@ function views_content_views_panes_content_type_content_type($subtype, $plugin) 
 }
 
 function _views_content_panes_content_type($view, $display) {
+  // Ensure the handler is the right type, as Views will fall back to
+  // the default display if something is broken:
+  if (get_class($display->handler) != 'views_content_plugin_display_panel_pane') {
+    return;
+  }
+
   $title = $display->handler->get_option('pane_title');
   if (!$title) {
     $title = $view->name;
@@ -173,7 +181,7 @@ function views_content_views_panes_content_type_render($subtype, $conf, $panel_a
         break;
 
       case 'panel':
-        $args[] = $panel_args[$argument['panel']];
+        $args[] = isset($panel_args[$argument['panel']]) ? $panel_args[$argument['panel']] : NULL;
         break;
 
       case 'user':
@@ -278,7 +286,7 @@ function views_content_views_panes_content_type_render($subtype, $conf, $panel_a
   if ($allow['fields_override']) {
     if ($conf['fields_override']) {
       $fields = $view->get_items('field');
-      foreach ($conf['fields_override'] as $field => $display) {
+      foreach ($fields as $field => $display) {
         $fields[$field]['exclude'] = empty($conf['fields_override'][$field]);
       }
       $view->display_handler->set_option('fields', $fields);

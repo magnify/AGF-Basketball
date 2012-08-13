@@ -1,5 +1,4 @@
 <?php
-// $Id: common.inc,v 1.10.2.11 2010/07/03 01:24:55 merlinofchaos Exp $
 
 
 /**
@@ -295,6 +294,7 @@ function panels_common_settings(&$form_state, $module_name = 'panels_common') {
           '#title' => t('Allowed @s content', array('@s' => $info['title'])),
           '#options' => $options[$id],
           '#default_value' => array_keys(array_filter($allowed[$id])),
+          '#checkall' => TRUE,
         );
       }
     }
@@ -399,6 +399,7 @@ function panels_common_allowed_layouts_form(&$form, &$form_state, $module_name) 
     '#default_value' => array_keys(array_filter($allowed_layouts->allowed_layout_settings)),
     '#prefix' => '<div class="clear-block panels-layouts-checkboxes">',
     '#suffix' => '</div>',
+    '#checkall' => TRUE,
   );
 
   return $form;

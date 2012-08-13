@@ -1,5 +1,4 @@
 <?php
-// $Id: term.inc,v 1.5.2.3 2010/04/14 20:37:40 merlinofchaos Exp $
 
 /**
  * @file
@@ -23,6 +22,7 @@ $plugin = array(
   'convert list' => array(
     'tid' => t('Term ID'),
     'name' => t('Term name'),
+    'name_dashed' => t('Term name, lowercased and spaces converted to dashes'),
     'description' => t('Term Description'),
     'vid' => t('Vocabulary ID'),
   ),
@@ -164,6 +164,8 @@ function ctools_context_term_convert($context, $type) {
       return $context->data->tid;
     case 'name':
       return $context->data->name;
+    case 'name_dashed':
+      return drupal_strtolower(str_replace(' ', '-', $context->data->name));
     case 'vid':
       return $context->data->vid;
     case 'description':

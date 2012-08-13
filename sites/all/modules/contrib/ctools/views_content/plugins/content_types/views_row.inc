@@ -1,5 +1,4 @@
 <?php
-// $Id: views_row.inc,v 1.1.2.2 2010/07/21 17:37:04 merlinofchaos Exp $
 
 /**
  * @file
@@ -60,7 +59,9 @@ function views_content_views_row_content_type_render($subtype, $conf, $panel_arg
     // Rerender just the rows we need.
     foreach ($conf['rows'] as $row) {
       $view->row_index = $row - 1;
-      $block->content .= $view->style_plugin->row_plugin->render($view->result[$row - 1]);
+      if (!empty($view->result[$row - 1])) {
+        $block->content .= $view->style_plugin->row_plugin->render($view->result[$row - 1]);
+      }
     }
   }
 
@@ -89,14 +90,8 @@ function views_content_views_row_edit(&$form, &$form_state) {
     return;
   }
 
-  // Support Views 2 and Views 3.
-  if (method_exists($view, 'get_items_per_page')) {
-    $view->init_pager();
-    $rows = $view->get_items_per_page();
-  }
-  else {
-    $rows = $view->display_handler->get_option('items_per_page');
-  }
+  $rows = $view->get_items_per_page();
+
   if (empty($rows)) {
     $form['markup'] = array('#value' => '<p>' . t('The view must have a maximum number of items set to use this content type.') . '</p>');
     return;

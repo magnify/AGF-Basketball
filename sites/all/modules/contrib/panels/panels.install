@@ -1,5 +1,4 @@
 <?php
-// $Id: panels.install,v 1.4.2.37 2010/07/23 21:49:03 merlinofchaos Exp $
 
 /**
  * Test requirements for installation and running.
@@ -53,6 +52,7 @@ function panels_requirements_runtime() {
   if (empty($state)) {
     $requirements['panels_legacy'] = array(
       'title' => $t('Panels operating normally'),
+      'value' => NULL,
       'severity' => REQUIREMENT_OK,
       'description' => $t('Panels is operating normally - no out-of-date plugins or modules are forcing it into legacy mode'),
     );
@@ -75,6 +75,7 @@ function panels_requirements_runtime() {
 
     $requirements['panels_legacy'] = array(
       'title' => $t('Panels operating in Legacy mode'),
+      'value' => NULL,
       'severity' => REQUIREMENT_WARNING,
       'description' => $description,
     );
@@ -250,7 +251,7 @@ function panels_schema_1() {
       ),
       'layout' => array(
         'type' => 'varchar',
-        'length' => '32',
+        'length' => '255',
         'default' => '',
       ),
       'layout_settings' => array(
@@ -1495,6 +1496,13 @@ function panels_update_6309() {
  */
 function panels_update_6310() {
   $ret = array();
+  // load the module files, if possible
+  if (!defined('PANELS_REQUIRED_CTOOLS_API')) {
+    include_once drupal_get_path('module', 'panels') . '/panels.module';
+  }
+  if (!defined('CTOOLS_API_VERSION')) {
+    include_once drupal_get_path('module', 'ctools') . '/ctools.module';
+  }
   // Safety: go away if CTools is not at an appropriate version.
   if (!module_invoke('ctools', 'api_version', PANELS_REQUIRED_CTOOLS_API)) {
     $ret['#abort'] = array('success' => FALSE, 'query' => t('Panels cannot be updated because CTools 1.7 (API v1.7.2) is required. Please update CTools and then try update.php again.'));
@@ -1503,5 +1511,28 @@ function panels_update_6310() {
 
   // Enable the stylizer module to make everything as seamless as possible.
   drupal_install_modules(array('stylizer'));
+  return $ret;
+}
+
+/**
+ * Change panels_display.layout to match the size of panels_layout.name.
+ */
+function panels_update_6311() {
+  $ret = array();
+
+  // Clear the schema cache so the change is picked up.
+  cache_clear_all('schema', 'cache');
+
+  // Load the schema.
+  $schema = panels_schema();
+  $table = 'panels_display';
+  $field = 'layout';
+  $spec = $schema[$table]['fields'][$field];
+
+  // Re-define the column.
+  db_change_field($ret, $table, $field, $field, $spec);
+
+  $ret[] = array('success' => TRUE, 'query' => t('Changed the panels_display.layout field to the correct size.'));
+
   return $ret;
 }

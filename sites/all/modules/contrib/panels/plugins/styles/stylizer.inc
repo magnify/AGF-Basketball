@@ -1,5 +1,4 @@
 <?php
-// $Id: stylizer.inc,v 1.1.2.4 2010/07/26 17:21:20 merlinofchaos Exp $
 
 /**
  * @file
@@ -90,15 +89,19 @@ function _panels_stylizer_get_style($plugin, $style_settings) {
   if (!empty($plugin['style'])) {
     return $plugin['style']->settings;
   }
-  else if ($style_settings['style'] == '$') {
+
+  if (empty($style_settings)) {
+    return array();
+  }
+
+  if ($style_settings['style'] == '$') {
     return $style_settings['settings'];
   }
-  else {
-    ctools_include('export');
-    $style = ctools_export_crud_load('stylizer', $style_settings['style']);
-    if ($style) {
-      return $style->settings;
-    }
+
+  ctools_include('export');
+  $style = ctools_export_crud_load('stylizer', $style_settings['style']);
+  if ($style) {
+    return $style->settings;
   }
 }
 
@@ -138,9 +141,12 @@ function theme_panels_stylizer_stylizer_style_render_pane($content, $pane, $disp
     $plugin = ctools_get_style_base($settings['style_base']);
 
     if (empty($content->css_class)) {
-      $content->css_class = '';
+      $content->css_class = ctools_stylizer_get_css_class($plugin, $settings);
     }
-    $content->css_class .= ctools_stylizer_get_css_class($plugin, $settings);
+    else {
+      $content->css_class .= ' ' . ctools_stylizer_get_css_class($plugin, $settings);
+    }
+
     ctools_stylizer_add_css($plugin, $settings);
 
     if (isset($plugin['theme'])) {
@@ -243,7 +249,7 @@ function panels_stylizer_pane_add_style(&$renderer, $plugin, &$conf, $type, $pid
  * preconfigured style.
  */
 function panels_stylizer_edit_pane_style_form(&$form, &$form_state) {
-  if (!user_access('administer panels styles')) {
+  if (!user_access('administer panels styles') || !module_exists('stylizer')) {
     return;
   }
   ctools_include('dependent');

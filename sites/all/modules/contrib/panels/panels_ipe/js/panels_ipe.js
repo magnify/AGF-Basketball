@@ -1,4 +1,3 @@
-// $Id: panels_ipe.js,v 1.1.2.12 2010/07/12 08:49:00 sdboyer Exp $
 
 // Ensure the $ alias is owned by jQuery.
 (function($) {
@@ -17,7 +16,7 @@ Drupal.PanelsIPE = {
         }
         return false;
       });
-  },
+  }
 }
 
 // A ready function should be sufficient for this, at least for now
@@ -60,6 +59,8 @@ Drupal.CTools.AJAX.commands.endIPE = function(data) {
     Drupal.PanelsIPE.editors[data.key].endEditing(data);
   }
 };
+
+
 
 /**
  * Base object (class) definition for the Panels In-Place Editor.
@@ -139,10 +140,10 @@ function DrupalPanelsIPE(cache_key, cfg) {
     });
 
     $('input:submit', ipe.control).each(function() {
-      if ($(this).val() == 'Save') {
+      if ($(this).attr('id') == 'panels-ipe-save') {
         $(this).click(ipe.saveEditing);
       };
-      if ($(this).val() == 'Cancel') {
+      if ($(this).attr('id') == 'panels-ipe-cancel') {
         $(this).click(ipe.cancelEditing);
       };
     });
@@ -162,8 +163,9 @@ function DrupalPanelsIPE(cache_key, cfg) {
 
     // Re-hide all the IPE meta-elements
     $('div.panels-ipe-on').hide('fast');
-    ipe.initButton.css('position', 'normal');
+    ipe.initButton.css('position', 'static');
     ipe.topParent.removeClass('panels-ipe-editing');
+   $('div.panels-ipe-sort-container', ipe.topParent).sortable("destroy");
   };
 
   this.saveEditing = function() {
