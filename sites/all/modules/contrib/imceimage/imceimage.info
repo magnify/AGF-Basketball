@@ -1,0 +1,13 @@
+name = IMCE Image
+description = Defines an IMCE image field type.
+dependencies[] = imce
+dependencies[] = content
+package = CCK
+core = 6.x
+
+; Information added by drupal.org packaging script on 2011-12-07
+version = "6.x-2.0-alpha2"
+core = "6.x"
+project = "imceimage"
+datestamp = "1323278441"
+
