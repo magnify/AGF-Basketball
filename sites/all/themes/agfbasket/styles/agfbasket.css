@@ -1019,3 +1019,61 @@ table tbody tr:hover td,
 table tbody tr:hover th {
   background-color: #f6f6f6;
 }
+
+/* Convetus styling */
+
+.cvt_6640,
+.cvt_bt {
+  color: #969a9b !important;
+  font-size: 12px !important;
+}
+
+.cvt_bt tbody tr:hover td,
+.cvt_bt tbody tr:hover th,
+.cvt_bt th,
+.cvt_bt th:hover,
+.cvt_bt td,
+.cvt_bt td:hover {
+  background-color: transparent !important;
+  border: 0 !important;
+  padding-left: 0 !important;
+  padding-right: 0 !important;
+}
+
+.cvt_bt input,
+#cvt_info .cvt_bt input {
+  color: #000 !important;
+}
+
+#cvt_info {
+  background-color: #222 !important;
+  padding: 10px !important;
+}
+
+#cvt_info table {
+  margin-bottom: 0 !important;
+}
+
+#cvt_info tr {
+  background-color: #333 !important;
+  border-bottom: 1px solid #222 !important;
+}
+
+#cvt_info tr tr {
+  border: 0 !important;
+  padding: 0 !important;
+}
+
+#cvt_info tr td {
+  padding: 5px 10px !important;
+}
+
+#cvt_info .cvt_6640,
+#cvt_info .cvt_bt,
+#cvt_info .cvt_os {
+  color: #fff !important;
+}
+
+#cvt_info ol {
+  margin-left: 0 !important;
+}
